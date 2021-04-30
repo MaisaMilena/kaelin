@@ -1,15 +1,15 @@
 const fm = require("formality-core");
 
 //try {
-  var code = require("./../../formality/stdlib/_export_to_webpack_.js");
+  var code = require("./../formality/stdlib/_export_to_webpack_.js");
 //} catch (e) {
   //var code = require("./../../formality-core/examples/_export_to_node_.js");
 //}
-
 const {infs, defs} = fm.core.parse(code);
+console.log("defs: ",defs["Stack.push"]);
 const compile      = name => fm.to_js.compile(defs[name], defs);
-const Cons         = compile("Stack.push");
-const Nil          = compile("Stack.new");
+const Cons         = compile("Cons");
+const Nil          = compile("Nil");
 const
   [new_board,
   [cast,
