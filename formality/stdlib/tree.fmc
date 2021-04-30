@@ -1,0 +1,14 @@
+def NodeF: {lft rgt}
+  {Node Leaf}
+  dup Node = Node
+  dup Leaf = Leaf
+  dup lft  = (lft #Node #Leaf)
+  dup rgt  = (rgt #Node #Leaf)
+  # (Node lft rgt)
+
+def LeafF: {val}
+  {Node Leaf}
+  dup Node = Node
+  dup Leaf = Leaf
+  dup val  = val
+  # (Leaf val)
