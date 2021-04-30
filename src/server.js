@@ -26,6 +26,7 @@ function post(msg) {
 app.ws("/chat", function(ws, req) {
   console.log("New connection. Online: " + (++online) + ".");
 
+  var playersReady = 0;
   const cid = ++next_id;
   clients[cid] = ws;
 
@@ -35,12 +36,30 @@ app.ws("/chat", function(ws, req) {
 
   ws.on("message", function(msg) {
     console.log("Message: " + msg);
-    if (msg.slice(-5) === "RESET") {
-      messages = [];
+    let message = msg.slice(msg.indexOf(":") + 1).split(' ').join('');
+    if (message.length > 0) {
+      switch (message) {
+        case "/finish":
+          messages = [];
+          // TODO: stops the game for everyone
+          break; 
+        case "/ready":
+          playersReady++;
+          if (playersReady == online) {
+            console.log(">> Game is ready to start!");
+            post("[Kaelin]: Brace yourself, the game is beginning now!")
+            // TODO: send message to everyone that the game can start
+            post("[Kaelin]: /next");
+          } else {
+            var remainingPlayers = online - playersReady;
+            post("[Kaelin]: a player is ready for battle. Waiting for others "+remainingPlayers);
+          }
+        default:
+          post(msg);
+      }
+      // post(msg);
     }
-    if (msg.slice(msg.indexOf(":") + 1).length > 0) {
-      post(msg);
-    }
+    
   });
 
   ws.on("close", function() {
